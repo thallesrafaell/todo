@@ -1,6 +1,7 @@
 import { Flex, HStack, Text, Badge } from "@chakra-ui/react";
 import { Checkbox } from "@/components/ui/checkbox";
 import { RiStarLine } from "react-icons/ri";
+import { useColorModeValue } from "@/components/ui/color-mode";
 
 type TaskProps = {
   id: number;
@@ -13,14 +14,15 @@ export default function Task({ id, name }: TaskProps) {
       align="center"
       mb={4}
       justifyContent={"space-between"}
-      _hover={{ border: "1px solid white" }}
+      _hover={{ border: `1px solid ${useColorModeValue("gray", "white")}` }}
       borderRadius={4}
       padding={"8px 10px"}
+      transition="border 0.3s ease, background-color 0.3s ease"
     >
       <Flex direction={"column"}>
         <Flex gap={2} mb={2}>
           <Checkbox variant={"solid"} colorPalette={"blue"} />
-          <Text color={"white"}>{name}</Text>
+          <Text color={useColorModeValue("black", "white")}>{name}</Text>
         </Flex>
 
         <Flex>
@@ -35,7 +37,7 @@ export default function Task({ id, name }: TaskProps) {
       </Flex>
       <Flex alignItems={"center"} gap={2} color={"gray.400"}>
         <Text>Há 1 minuto</Text>
-        <RiStarLine color={"white"} />
+        <RiStarLine color={useColorModeValue("black", "white")} />
       </Flex>
     </HStack>
   );

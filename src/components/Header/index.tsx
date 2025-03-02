@@ -12,16 +12,26 @@ import {
 import { FaCheck } from "react-icons/fa";
 import { InputGroup } from "../ui/input-group";
 import { BiSearch } from "react-icons/bi";
-import { LuSun } from "react-icons/lu";
+import { LuMoon, LuSun } from "react-icons/lu";
+import {
+  ColorModeButton,
+  useColorMode,
+  useColorModeValue,
+} from "@/components/ui/color-mode";
 
 export default function Header() {
+  const { toggleColorMode, colorMode } = useColorMode();
   return (
     <VStack bg={"blue"} p={4}>
       <Container maxW="container.xl">
         <Flex alignItems={"center"} justifyContent={"space-between"} gap={2}>
           <Flex alignItems={"center"} gap={2}>
-            <FaCheck size={24} color="white" />
-            <Text textStyle="lg" fontWeight={"bold"}>
+            <FaCheck size={24} color={useColorModeValue("white", "white")} />
+            <Text
+              textStyle="lg"
+              fontWeight={"bold"}
+              color={useColorModeValue("white", "white")}
+            >
               Todo
             </Text>
           </Flex>
@@ -34,7 +44,11 @@ export default function Header() {
             color={"gray.900"}
             display={{ base: "none", md: "block" }}
           >
-            <Input placeholder="Search task" width="400px" borderColor={"blue"} />
+            <Input
+              placeholder="Search task"
+              width="400px"
+              borderColor={"blue"}
+            />
           </InputGroup>
           <Flex gap={{ base: "2px", md: "4px" }}>
             <ClientOnly fallback={<Skeleton boxSize="8" />}>
@@ -43,13 +57,18 @@ export default function Header() {
                 size="sm"
                 border={"none"}
                 _hover={{ bg: "transparent", scale: 1.1 }}
+                color={useColorModeValue("white", "white")}
+                onClick={toggleColorMode}
               >
-                <LuSun />
+                {colorMode === "light" ? <LuSun /> : <LuMoon />}
               </IconButton>
             </ClientOnly>
 
             <Flex alignItems={"center"} gap={2}>
-              <Text> Thalles Rafael</Text>
+              <Text color={useColorModeValue("white", "white")}>
+                {" "}
+                Thalles Rafael
+              </Text>
               <Avatar.Root width={8} height={8}>
                 <Avatar.Fallback name="Thalles RafaelS" />
                 <Avatar.Image src="https://bit.ly/sage-adebayo" />

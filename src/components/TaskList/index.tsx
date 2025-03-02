@@ -16,6 +16,7 @@ import { InputGroup } from "../ui/input-group";
 import { BiPlus } from "react-icons/bi";
 import { useGlobalState } from "@/context/GlobalStateContext";
 import { Task as TaskType } from "@/context/reducer";
+import { useColorModeValue } from "@/components/ui/color-mode";
 
 export default function TaskList() {
   const { state, dispatch } = useGlobalState();
@@ -84,7 +85,7 @@ export default function TaskList() {
             border="none"
             borderRadius={4}
             startElement={<BiPlus color="blue" />}
-            color={"white"}
+            color={useColorModeValue("gray.900", "white")}
             backgroundColor={"transparent"}
             fontSize={"xl"}
             width="100%"
@@ -92,7 +93,7 @@ export default function TaskList() {
           >
             <Input
               placeholder="Add Task"
-              _placeholder={{ color: "white" }}
+              _placeholder={{ color: `${useColorModeValue("black", "white")}` }}
               value={taskName}
               border="none"
               width="100%"
@@ -101,7 +102,13 @@ export default function TaskList() {
             />
           </InputGroup>
           {addVisible && (
-            <Flex justifyContent={"flex-end"} width={"100%"}>
+            <Flex
+              justifyContent={"flex-end"}
+              width={"100%"}
+              opacity={addVisible ? 1 : 0}
+              transform={addVisible ? "translateY(0)" : "translateY(-10px)"}
+              transition="opacity 0.3s ease, transform 0.3s ease"
+            >
               <Button
                 colorPalette="red"
                 variant="outline"
