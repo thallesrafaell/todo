@@ -1,10 +1,13 @@
-import { Button, HStack } from "@chakra-ui/react";
+"use client";
+import Header from "@/components/Header";
+import { ColorModeButton, useColorMode } from "@/components/ui/color-mode";
 
 export default function Home() {
+  const { toggleColorMode, colorMode } = useColorMode();
+
   return (
-    <HStack>
-      <Button size={"xs"}>Click me</Button>
-      <Button>Click me</Button>
-    </HStack>
+    <>
+      <Header />
+    </>
   );
 }
