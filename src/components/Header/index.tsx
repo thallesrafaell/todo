@@ -34,7 +34,7 @@ export default function Header() {
             color={"gray.900"}
             display={{ base: "none", md: "block" }}
           >
-            <Input placeholder="Username" width="400px" borderColor={"blue"} />
+            <Input placeholder="Search task" width="400px" borderColor={"blue"} />
           </InputGroup>
           <Flex gap={{ base: "2px", md: "4px" }}>
             <ClientOnly fallback={<Skeleton boxSize="8" />}>
