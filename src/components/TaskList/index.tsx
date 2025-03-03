@@ -186,8 +186,7 @@ export default function TaskList() {
                   type="button"
                   onClick={(e) => {
                     e.preventDefault();
-                    console.log("Clique no botão 'Save'!");
-                    console.log("Task Name Before Add:", taskName);
+
                     handleAddTask({
                       id: Date.now(),
                       name: taskName,
@@ -197,9 +196,11 @@ export default function TaskList() {
                       important,
                       category: "",
                     });
-                    console.log("TASK NAME >>>>", taskName);
+
                     setTaskName("");
                     setAddVisible(false);
+                    setImportant(false);
+                    setPriority("Baixa");
                   }}
                 >
                   Save

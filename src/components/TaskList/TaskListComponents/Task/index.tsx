@@ -42,8 +42,7 @@ export default function Task({
   category,
 }: TaskProps) {
   const { dispatch } = useGlobalState();
-  const { isOpen, onOpen, onClose } = useDisclosure();
-
+  
   const handleRemoveTask = (id: number) => {
     dispatch({ type: "REMOVE_TASK", payload: id });
   };
@@ -91,7 +90,7 @@ export default function Task({
       </Flex>
       <Flex gap={2} align={"center"}>
         <Text display={{ base: "none", md: "block" }}>Há 1 minuto</Text>
-        {important ? (
+        {!important ? (
           <RiStarLine color={starColor} />
         ) : (
           <RiStarFill color={starColor} />
