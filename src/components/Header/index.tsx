@@ -13,11 +13,7 @@ import { FaCheck } from "react-icons/fa";
 import { InputGroup } from "../ui/input-group";
 import { BiSearch } from "react-icons/bi";
 import { LuMoon, LuSun } from "react-icons/lu";
-import {
-  ColorModeButton,
-  useColorMode,
-  useColorModeValue,
-} from "@/components/ui/color-mode";
+import { useColorMode, useColorModeValue } from "@/components/ui/color-mode";
 
 export default function Header() {
   const { toggleColorMode, colorMode } = useColorMode();
@@ -71,7 +67,6 @@ export default function Header() {
               </Text>
               <Avatar.Root width={8} height={8}>
                 <Avatar.Fallback name="Thalles RafaelS" />
-                <Avatar.Image src="https://bit.ly/sage-adebayo" />
               </Avatar.Root>
             </Flex>
           </Flex>

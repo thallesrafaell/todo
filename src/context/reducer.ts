@@ -13,19 +13,17 @@ export interface Task {
 }
 
 interface State {
-  addVisible: boolean;
   tasks: Task[];
 }
 
 // Definindo as ações possíveis (Action)
 interface Action {
   type: string;
-  payload?: any; // Pode ser qualquer tipo, mas no caso de ADD_TASK e REMOVE_TASK, é um Task ou id
+  payload?: any;
 }
 
 // Estado inicial
 export const initialState: State = {
-  addVisible: false,
   tasks: [],
 };
 
@@ -35,11 +33,17 @@ export const actionTypes = {
   REMOVE_TASK: "REMOVE_TASK",
   EDIT_TASK: "EDIT_TASK",
   GET_TASK_BY_ID: "GET_TASK_BY_ID",
+  LOAD_TASKS: "LOAD_TASKS",
 } as const;
 
-// Redefinindo o reducer com o tipo correto de estado e ação
+// Reducer
 export const reducer = (state: State, action: Action): State => {
   switch (action.type) {
+    case "LOAD_TASKS":
+      return {
+        ...state,
+        tasks: action.payload, // Carrega as tarefas do localStorage
+      };
     case actionTypes.ADD_TASK:
       return {
         ...state,
@@ -71,4 +75,12 @@ export const reducer = (state: State, action: Action): State => {
     default:
       return state;
   }
+};
+
+export const loadInitialState = (): Task[] => {
+  const savedTasks = localStorage.getItem("USER_TASKS");
+  if (savedTasks) {
+    return JSON.parse(savedTasks); // Retorna as tarefas carregadas
+  }
+  return []; // Retorna um array vazio se não houver dados
 };
