@@ -65,14 +65,7 @@ export default function TaskList() {
     return () => clearInterval(interval);
   }, []);
 
-  const priorityCollection = createListCollection({
-    items: [
-      { label: "Urgente", value: "Urgente" },
-      { label: "Alta", value: "Alta" },
-      { label: "Média", value: "Média" },
-      { label: "Baixa", value: "Baixa" },
-    ],
-  });
+  
 
   return (
     <HStack paddingTop={10} paddingBottom={10}>
@@ -232,3 +225,11 @@ export default function TaskList() {
     </HStack>
   );
 }
+export const priorityCollection = createListCollection({
+    items: [
+      { label: "Urgente", value: "Urgente" },
+      { label: "Alta", value: "Alta" },
+      { label: "Média", value: "Média" },
+      { label: "Baixa", value: "Baixa" },
+    ],
+  });
