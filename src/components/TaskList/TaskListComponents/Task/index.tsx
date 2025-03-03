@@ -71,13 +71,12 @@ export default function Task({
             variant={"surface"}
             colorPalette={
               priority === "Urgente"
-                ? "red" // Se a prioridade for "Urgente", cor vermelha
+                ? "red" 
                 : priority === "Alta"
-                ? "orange" // Se a prioridade for "Alta", cor laranja
+                ? "orange" 
                 : priority === "Média"
-                ? "yellow" // Se a prioridade for "Média", cor amarela
-                : "green" // Se a prioridade for "Baixa", cor verde
-            }
+                ? "yellow" 
+                : "green"}
             ml={7}
           >
             {priority}
