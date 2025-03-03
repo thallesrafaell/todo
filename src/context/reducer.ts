@@ -4,6 +4,12 @@
 export interface Task {
     id: number;
     name: string;
+    done: boolean;
+    createdAt: string;
+    updatedAt?: string;
+    priority: "Urgente"| "Alta" | "Média" | "Baixa";
+    important: boolean;
+    category: string;
   }
   
   interface State {

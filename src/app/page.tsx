@@ -3,7 +3,7 @@ import Header from "@/components/Header";
 import TaskList from "@/components/TaskList";
 import { useColorModeValue } from "@/components/ui/color-mode";
 import { GlobalStateProvider } from "@/context/GlobalStateContext";
-import { Box, HStack, VStack } from "@chakra-ui/react";
+import { Box } from "@chakra-ui/react";
 
 export default function Home() {
   return (
