@@ -30,7 +30,6 @@ import { useColorModeValue } from "@/components/ui/color-mode";
 import { RiStarFill, RiStarLine } from "react-icons/ri";
 import { useRouter } from "next/router";
 
-
 interface TaskListProps {
   searchTerm: string;
 }
@@ -48,12 +47,9 @@ export default function TaskList({ searchTerm }: TaskListProps) {
   const [addVisible, setAddVisible] = useState(false);
   const name = state.name;
   const [date, setDate] = useState<string | null>(null);
-  
 
   const [byDateIsVisible, setByDateIsVisible] = useState(false);
   const [byAlphabeticalIsVisible, setByAlphabeticalIsVisible] = useState(false);
-
-  
 
   const filteredTasks = tasks.filter((task: TaskType) =>
     task.name.toLowerCase().includes((searchTerm || "").toLowerCase())
@@ -72,7 +68,6 @@ export default function TaskList({ searchTerm }: TaskListProps) {
   const handleAddTask = (task: TaskType) => {
     dispatch({ type: "ADD_TASK", payload: task });
   };
-  
 
   useEffect(() => {
     const interval = setInterval(() => {
@@ -114,146 +109,156 @@ export default function TaskList({ searchTerm }: TaskListProps) {
             </Text>
           </Flex>
         </Flex>
-        <VStack alignItems={"start"} width={"100%"}>
-          <InputGroup
-            bg="white"
-            border="none"
-            borderRadius={4}
-            startElement={<BiPlus color="blue" />}
-            color={useColorModeValue("gray.900", "white")}
-            backgroundColor={"transparent"}
-            fontSize={"xl"}
-            width="100%"
-            onFocus={() => setAddVisible(true)}
-          >
-            <Input
-              placeholder="Add Task"
-              _placeholder={{ color: `${useColorModeValue("black", "white")}` }}
-              value={taskName}
+        <form
+          onSubmit={(e) => {
+            e.preventDefault();
+
+            handleAddTask({
+              id: Date.now(),
+              name: taskName,
+              done: false,
+              createdAt: new Date().toISOString(),
+              priority,
+              important,
+              category: category,
+            });
+
+            setTaskName("");
+            setAddVisible(false);
+            setImportant(false);
+            setPriority("Baixa");
+            setCategory("Outros");
+          }}
+        >
+          <VStack alignItems={"start"} width={"100%"}>
+            <InputGroup
+              bg="white"
               border="none"
-              width="100%"
+              borderRadius={4}
+              startElement={<BiPlus color="blue" />}
+              color={useColorModeValue("gray.900", "white")}
               backgroundColor={"transparent"}
-              onChange={(e) => setTaskName(e.target.value)}
-            />
-          </InputGroup>
-          {addVisible && (
-            <Flex
-              justifyContent={"space-between"}
-              width={"100%"}
-              gap={2}
-              flexDirection={{ base: "column", md: "row" }}
+              fontSize={"xl"}
+              width="100%"
+              onFocus={() => setAddVisible(true)}
+              _required={{ color: "red" }}
             >
+              <Input
+                placeholder="Add Task"
+                required
+                _placeholder={{
+                  color: `${useColorModeValue("black", "white")}`,
+                }}
+                value={taskName}
+                border="none"
+                width="100%"
+                backgroundColor={"transparent"}
+                onChange={(e) => setTaskName(e.target.value)}
+              />
+            </InputGroup>
+            {addVisible && (
               <Flex
-                justifyContent={"flex-start"}
-                alignItems={"center"}
-                marginLeft={3}
+                justifyContent={"space-between"}
+                width={"100%"}
                 gap={2}
-                width={"100%"}
-                opacity={addVisible ? 1 : 0}
-                transform={addVisible ? "translateY(0)" : "translateY(-10px)"}
-                transition="opacity 0.3s ease, transform 0.3s ease"
+                flexDirection={{ base: "column", md: "row" }}
               >
-                <a
-                  href="#"
-                  onClick={(e) => {
-                    e.preventDefault();
-                    setImportant(!important);
-                  }}
+                <Flex
+                  justifyContent={"flex-start"}
+                  alignItems={"center"}
+                  marginLeft={3}
+                  gap={2}
+                  width={"100%"}
+                  opacity={addVisible ? 1 : 0}
+                  transform={addVisible ? "translateY(0)" : "translateY(-10px)"}
+                  transition="opacity 0.3s ease, transform 0.3s ease"
                 >
-                  {important ? <RiStarFill /> : <RiStarLine />}
-                </a>
-                <SelectRoot
-                  collection={priorityCollection}
-                  size="md"
-                  width="100px"
-                  defaultValue={["Baixa"]}
-                  onChange={(event) =>
-                    setPriority(
-                      (event.target as HTMLSelectElement).value as
-                        | "Urgente"
-                        | "Alta"
-                        | "Média"
-                        | "Baixa"
-                    )
-                  }
+                  <a
+                    href="#"
+                    onClick={(e) => {
+                      e.preventDefault();
+                      setImportant(!important);
+                    }}
+                  >
+                    {important ? <RiStarFill /> : <RiStarLine />}
+                  </a>
+                  <SelectRoot
+                    collection={priorityCollection}
+                    size="md"
+                    width="100px"
+                    defaultValue={["Baixa"]}
+                    onChange={(event) =>
+                      setPriority(
+                        (event.target as HTMLSelectElement).value as
+                          | "Urgente"
+                          | "Alta"
+                          | "Média"
+                          | "Baixa"
+                      )
+                    }
+                  >
+                    <SelectTrigger>
+                      <SelectValueText placeholder="Selecione a prioridade" />
+                    </SelectTrigger>
+                    <SelectContent>
+                      {priorityCollection.items.map((priorityItem) => (
+                        <SelectItem
+                          key={priorityItem.value}
+                          item={priorityItem}
+                        >
+                          {priorityItem.label}
+                        </SelectItem>
+                      ))}
+                    </SelectContent>
+                  </SelectRoot>
+                  <NativeSelect.Root
+                    size="md"
+                    width="100px"
+                    defaultValue={category}
+                    onChange={(event) =>
+                      setCategory((event.target as HTMLSelectElement).value)
+                    }
+                  >
+                    <NativeSelect.Field placeholder="Selecione a categoria">
+                      <option value="Saúde">Saúde</option>
+                      <option value="Trabalho">Trabalho</option>
+                      <option value="Estudo">Estudo</option>
+                      <option value="Financeiro">Financeiro</option>
+                      <option value="Lazer">Lazer</option>
+                      <option value="Outros">Outros</option>
+                    </NativeSelect.Field>
+                    <NativeSelect.Indicator />
+                  </NativeSelect.Root>
+                </Flex>
+                <Flex
+                  justifyContent={{ base: "flex-start", md: "flex-end" }}
+                  width={"100%"}
+                  opacity={addVisible ? 1 : 0}
+                  transform={addVisible ? "translateY(0)" : "translateY(-10px)"}
+                  transition="opacity 0.3s ease, transform 0.3s ease"
+                  marginTop={{ base: 2, md: 0 }}
+                  marginLeft={{ base: 3, md: 0 }}
                 >
-                  <SelectTrigger>
-                    <SelectValueText placeholder="Selecione a prioridade" />
-                  </SelectTrigger>
-                  <SelectContent>
-                    {priorityCollection.items.map((priorityItem) => (
-                      <SelectItem key={priorityItem.value} item={priorityItem}>
-                        {priorityItem.label}
-                      </SelectItem>
-                    ))}
-                  </SelectContent>
-                </SelectRoot>
-                <NativeSelect.Root
-                  size="md"
-                  width="100px"
-                  defaultValue={category}
-                  onChange={(event) =>
-                    setCategory((event.target as HTMLSelectElement).value)
-                  }
-                >
-                  <NativeSelect.Field placeholder="Selecione a categoria">
-                    <option value="Saúde">Saúde</option>
-                    <option value="Trabalho">Trabalho</option>
-                    <option value="Estudo">Estudo</option>
-                    <option value="Financeiro">Financeiro</option>
-                    <option value="Lazer">Lazer</option>
-                    <option value="Outros">Outros</option>
-                  </NativeSelect.Field>
-                  <NativeSelect.Indicator />
-                </NativeSelect.Root>
+                  <Button
+                    colorPalette="red"
+                    variant="outline"
+                    onClick={() => setAddVisible(false)}
+                  >
+                    Cancel
+                  </Button>
+                  <Button
+                    size={"sm"}
+                    colorPalette="blue"
+                    marginLeft={2}
+                    type="submit"
+                  >
+                    Save
+                  </Button>
+                </Flex>
               </Flex>
-              <Flex
-                justifyContent={{ base: "flex-start", md: "flex-end" }}
-                width={"100%"}
-                opacity={addVisible ? 1 : 0}
-                transform={addVisible ? "translateY(0)" : "translateY(-10px)"}
-                transition="opacity 0.3s ease, transform 0.3s ease"
-                marginTop={{ base: 2, md: 0 }}
-                marginLeft={{ base: 3, md: 0 }}
-              >
-                <Button
-                  colorPalette="red"
-                  variant="outline"
-                  onClick={() => setAddVisible(false)}
-                >
-                  Cancel
-                </Button>
-                <Button
-                  size={"sm"}
-                  colorPalette="blue"
-                  marginLeft={2}
-                  type="button"
-                  onClick={(e) => {
-                    e.preventDefault();
-
-                    handleAddTask({
-                      id: Date.now(),
-                      name: taskName,
-                      done: false,
-                      createdAt: new Date().toISOString(),
-                      priority,
-                      important,
-                      category: category,
-                    });
-
-                    setTaskName("");
-                    setAddVisible(false);
-                    setImportant(false);
-                    setPriority("Baixa");
-                    setCategory("Outros");
-                  }}
-                >
-                  Save
-                </Button>
-              </Flex>
-            </Flex>
-          )}
-        </VStack>
+            )}
+          </VStack>
+        </form>
         <Separator mt={4} mb={5} />
         <Flex justifyContent={"space-between"} alignItems={"center"}>
           <Flex>
