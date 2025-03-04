@@ -14,9 +14,11 @@ import { InputGroup } from "../ui/input-group";
 import { BiSearch } from "react-icons/bi";
 import { LuMoon, LuSun } from "react-icons/lu";
 import { useColorMode, useColorModeValue } from "@/components/ui/color-mode";
+import { useGlobalState } from "@/context/GlobalStateContext";
 
 export default function Header({ searchTerm, onSearch } : {searchTerm: string, onSearch: (term: string) => void}) {
   const { toggleColorMode, colorMode } = useColorMode();
+  const {state} = useGlobalState();
   return (
     <VStack bg={"blue"} p={4}>
       <Container maxW="container.xl">
@@ -65,7 +67,7 @@ export default function Header({ searchTerm, onSearch } : {searchTerm: string, o
             <Flex alignItems={"center"} gap={2}>
               <Text color={useColorModeValue("white", "white")}>
                 {" "}
-                Thalles Rafael
+                {state.name}
               </Text>
               <Avatar.Root width={8} height={8}>
                 <Avatar.Fallback name="Thalles RafaelS" />

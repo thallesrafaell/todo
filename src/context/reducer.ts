@@ -13,6 +13,7 @@ export interface Task {
 }
 
 interface State {
+  name: string;
   tasks: Task[];
 }
 
@@ -24,6 +25,7 @@ interface Action {
 
 // Estado inicial
 export const initialState: State = {
+  name: "",
   tasks: [],
 };
 
@@ -34,6 +36,7 @@ export const actionTypes = {
   EDIT_TASK: "EDIT_TASK",
   GET_TASK_BY_ID: "GET_TASK_BY_ID",
   LOAD_TASKS: "LOAD_TASKS",
+  SET_NAME: "SET_NAME",
 } as const;
 
 // Reducer
@@ -75,6 +78,12 @@ export const reducer = (state: State, action: Action): State => {
       return {
         ...state,
         tasks: state.tasks.filter((task) => task.id === action.payload),
+      };
+    case actionTypes.SET_NAME:
+      localStorage.setItem("USER_NAME", action.payload); // Caso para atualizar o nome
+      return {
+        ...state,
+        name: action.payload,
       };
     default:
       return state;

@@ -28,6 +28,7 @@ import { useGlobalState } from "@/context/GlobalStateContext";
 import { Task as TaskType } from "@/context/reducer";
 import { useColorModeValue } from "@/components/ui/color-mode";
 import { RiStarFill, RiStarLine } from "react-icons/ri";
+import { useRouter } from "next/router";
 
 
 interface TaskListProps {
@@ -45,12 +46,14 @@ export default function TaskList({ searchTerm }: TaskListProps) {
   const [category, setCategory] = useState("Outros");
 
   const [addVisible, setAddVisible] = useState(false);
-  const name = "Thalles Rafael";
+  const name = state.name;
   const [date, setDate] = useState<string | null>(null);
   
 
   const [byDateIsVisible, setByDateIsVisible] = useState(false);
   const [byAlphabeticalIsVisible, setByAlphabeticalIsVisible] = useState(false);
+
+  
 
   const filteredTasks = tasks.filter((task: TaskType) =>
     task.name.toLowerCase().includes((searchTerm || "").toLowerCase())
@@ -69,6 +72,7 @@ export default function TaskList({ searchTerm }: TaskListProps) {
   const handleAddTask = (task: TaskType) => {
     dispatch({ type: "ADD_TASK", payload: task });
   };
+  
 
   useEffect(() => {
     const interval = setInterval(() => {
@@ -101,7 +105,7 @@ export default function TaskList({ searchTerm }: TaskListProps) {
           marginBottom={5}
         >
           <Text fontWeight={"bold"} fontSize={"2xl"} textAlign={"start"}>
-            Olá, {name}
+            Olá{name ? `, ${name}` : ""}!
           </Text>
           <Flex gap={1} alignItems={"center"}>
             <CgCalendar />

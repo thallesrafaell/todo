@@ -1,12 +1,13 @@
 import { Task } from "../context/reducer";
 
-const LOCAL_STORAGE_KEY = "USER_TASKS"; // Chave para o localStorage
+
 
 // Função para carregar o estado inicial do localStorage
-export const loadInitialState = (): Task[] => {
-  const savedTasks = localStorage.getItem(LOCAL_STORAGE_KEY);
-  if (savedTasks) {
-    return JSON.parse(savedTasks); // Retorna as tarefas carregadas
-  }
-  return []; // Retorna um array vazio se não houver dados
+export const loadInitialState = (): { tasks: Task[]; name: string } => {
+  const savedTasks = localStorage.getItem("USER_TASKS");
+  const savedName = localStorage.getItem("USER_NAME");
+
+  const tasks = savedTasks ? JSON.parse(savedTasks) : [];
+  const name = savedName || ""; // Se não houver nome, retorna uma string vazia.
+  return { tasks, name };
 };

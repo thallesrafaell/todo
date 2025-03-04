@@ -15,9 +15,11 @@ export const GlobalStateProvider: React.FC<GlobalStateProviderProps> = ({
   children,
 }) => {
   const [storedTasks, setStoredTasks] = useLocalStorage();
+  const {tasks, name} = loadInitialState();
 
   const initialState = {
-    tasks: loadInitialState(), // Inicializa o estado com as tarefas carregadas
+    tasks, // Inicializa o estado com as tarefas carregadas
+    name, // Inicializa o estado com o nome carregado
   };
 
   // Inicializa o reducer com o estado inicial
