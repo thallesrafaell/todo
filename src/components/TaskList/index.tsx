@@ -9,6 +9,7 @@ import {
   VStack,
   Separator,
   createListCollection,
+  NativeSelect,
 } from "@chakra-ui/react";
 
 import {
@@ -19,10 +20,10 @@ import {
   SelectValueText,
 } from "@/components/ui/select";
 import Task from "./TaskListComponents/Task";
-import { CgCalendar } from "react-icons/cg";
+import { CgCalendar, CgCalendarDates } from "react-icons/cg";
 import { useEffect, useState } from "react";
 import { InputGroup } from "../ui/input-group";
-import { BiPlus } from "react-icons/bi";
+import { BiPlus, BiSort } from "react-icons/bi";
 import { useGlobalState } from "@/context/GlobalStateContext";
 import { Task as TaskType } from "@/context/reducer";
 import { useColorModeValue } from "@/components/ui/color-mode";
@@ -36,13 +37,26 @@ export default function TaskList() {
     "Urgente" | "Alta" | "Média" | "Baixa"
   >("Baixa");
   const [important, setImportant] = useState(false);
+  const [category, setCategory] = useState("Outros");
 
   const [addVisible, setAddVisible] = useState(false);
   const name = "Thalles Rafael";
   const [date, setDate] = useState<string | null>(null);
+  const [searchTerm, setSearchTerm] = useState("");
+
+  const [byDateIsVisible, setByDateIsVisible] = useState(false);
+  const [byAlphabeticalIsVisible, setByAlphabeticalIsVisible] = useState(false);
 
   const incompleteTasks = tasks.filter((task: TaskType) => !task.done);
   const completedTasks = tasks.filter((task: TaskType) => task.done);
+
+  const sortedByName = incompleteTasks.sort((a: TaskType, b: TaskType) =>
+    a.name.localeCompare(b.name)
+  );
+  const sortedByDate = incompleteTasks.sort(
+    (a: TaskType, b: TaskType) =>
+      new Date(a.createdAt).getTime() - new Date(b.createdAt).getTime()
+  );
 
   const handleAddTask = (task: TaskType) => {
     dispatch({ type: "ADD_TASK", payload: task });
@@ -111,7 +125,12 @@ export default function TaskList() {
             />
           </InputGroup>
           {addVisible && (
-            <Flex justifyContent={"space-between"} width={"100%"} gap={2}>
+            <Flex
+              justifyContent={"space-between"}
+              width={"100%"}
+              gap={2}
+              flexDirection={{ base: "column", md: "row" }}
+            >
               <Flex
                 justifyContent={"flex-start"}
                 alignItems={"center"}
@@ -157,13 +176,33 @@ export default function TaskList() {
                     ))}
                   </SelectContent>
                 </SelectRoot>
+                <NativeSelect.Root
+                  size="md"
+                  width="100px"
+                  defaultValue={category}
+                  onChange={(event) =>
+                    setCategory((event.target as HTMLSelectElement).value)
+                  }
+                >
+                  <NativeSelect.Field placeholder="Selecione a categoria">
+                    <option value="Saúde">Saúde</option>
+                    <option value="Trabalho">Trabalho</option>
+                    <option value="Estudo">Estudo</option>
+                    <option value="Financeiro">Financeiro</option>
+                    <option value="Lazer">Lazer</option>
+                    <option value="Outros">Outros</option>
+                  </NativeSelect.Field>
+                  <NativeSelect.Indicator />
+                </NativeSelect.Root>
               </Flex>
               <Flex
-                justifyContent={"flex-end"}
+                justifyContent={{ base: "flex-start", md: "flex-end" }}
                 width={"100%"}
                 opacity={addVisible ? 1 : 0}
                 transform={addVisible ? "translateY(0)" : "translateY(-10px)"}
                 transition="opacity 0.3s ease, transform 0.3s ease"
+                marginTop={{ base: 2, md: 0 }}
+                marginLeft={{ base: 3, md: 0 }}
               >
                 <Button
                   colorPalette="red"
@@ -187,13 +226,14 @@ export default function TaskList() {
                       createdAt: new Date().toISOString(),
                       priority,
                       important,
-                      category: "",
+                      category: category,
                     });
 
                     setTaskName("");
                     setAddVisible(false);
                     setImportant(false);
                     setPriority("Baixa");
+                    setCategory("Outros");
                   }}
                 >
                   Save
@@ -203,29 +243,112 @@ export default function TaskList() {
           )}
         </VStack>
         <Separator mt={4} mb={5} />
-        Tasks
-        {incompleteTasks.map((task: TaskType) => {
-          console.log("completa:", task);
-          return (
+        <Flex justifyContent={"space-between"} alignItems={"center"}>
+          <Flex>
+            <Text
+              fontWeight={"bold"}
+              fontSize={"xl"}
+              textAlign={"start"}
+              marginTop={4}
+              marginBottom={2}
+            >
+              Tarefas
+            </Text>
+          </Flex>
+          <Flex gap={2} alignItems={"end"}>
+            <Button
+              size={"sm"}
+              colorPalette="blue"
+              variant={byDateIsVisible ? "solid" : "outline"}
+              onClick={() => {
+                if (byDateIsVisible) {
+                  setByDateIsVisible(false);
+                  return;
+                }
+
+                setByDateIsVisible(true);
+                setByAlphabeticalIsVisible(false);
+              }}
+            >
+              <CgCalendarDates /> Data
+            </Button>
+            <Button
+              size={"sm"}
+              colorPalette="blue"
+              variant={byAlphabeticalIsVisible ? "solid" : "outline"}
+              onClick={() => {
+                if (byAlphabeticalIsVisible) {
+                  setByAlphabeticalIsVisible(false);
+                  return;
+                }
+                setByDateIsVisible(false);
+                setByAlphabeticalIsVisible(true);
+              }}
+            >
+              <BiSort /> Alfabética
+            </Button>
+          </Flex>
+        </Flex>
+        {byDateIsVisible &&
+          sortedByDate.map((task: TaskType) => (
             <div key={task.id}>
               <Task
-                key={task.id}
                 id={task.id}
                 name={task.name}
                 done={task.done}
                 createdAt={task.createdAt}
                 priority={task.priority}
                 important={task.important}
-                category={""}
+                category={task.category}
               />
               <Separator />
             </div>
-          );
-        })}
-        task completed
-        {completedTasks.map((task: TaskType) => {
-          console.log("imcompleta:", task);
+          ))}
 
+        {byAlphabeticalIsVisible &&
+          sortedByName.map((task: TaskType) => (
+            <div key={task.id}>
+              <Task
+                id={task.id}
+                name={task.name}
+                done={task.done}
+                createdAt={task.createdAt}
+                priority={task.priority}
+                important={task.important}
+                category={task.category}
+              />
+              <Separator />
+            </div>
+          ))}
+
+        {!(byAlphabeticalIsVisible || byDateIsVisible) &&
+          incompleteTasks.map((task: TaskType) => {
+            return (
+              <div key={task.id}>
+                <Task
+                  key={task.id}
+                  id={task.id}
+                  name={task.name}
+                  done={task.done}
+                  createdAt={task.createdAt}
+                  priority={task.priority}
+                  important={task.important}
+                  category={task.category}
+                />
+                <Separator />
+              </div>
+            );
+          })}
+        <Text
+          fontWeight={"bold"}
+          fontSize={"xl"}
+          textAlign={"start"}
+          marginTop={4}
+          marginBottom={2}
+        >
+          Tarefas Completas
+        </Text>
+        {completedTasks.map((task: TaskType) => {
           return (
             <div key={task.id}>
               <Task

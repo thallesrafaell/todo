@@ -4,6 +4,7 @@ import {
   Button,
   Flex,
   Input,
+  NativeSelect,
   SelectContent,
   SelectItem,
   SelectRoot,
@@ -25,12 +26,56 @@ import {
 import { Checkbox } from "@/components/ui/checkbox";
 
 import { Field } from "@/components/ui/field";
-import { useRef } from "react";
+import { useRef, useState } from "react";
 import { BiEdit } from "react-icons/bi";
 import { priorityCollection } from "@/components/TaskList";
+import { TaskProps } from "..";
+import { useGlobalState } from "@/context/GlobalStateContext";
 
-export default function ModalEditTask(id: number) {
-  const ref = useRef<HTMLInputElement>(null);
+export default function ModalEditTask({
+  id,
+  name,
+  createdAt,
+  updatedAt,
+  priority,
+  important,
+  category,
+  done,
+}: TaskProps) {
+  const { dispatch } = useGlobalState();
+
+  const [editedName, setEditedName] = useState(name);
+  const [editedPriority, setEditedPriority] = useState<
+    "Urgente" | "Alta" | "Média" | "Baixa"
+  >(priority);
+  const [editedCategory, setEditedCategory] = useState(category);
+  const [editedImportant, setEditedImportant] = useState(important);
+  const [editedDone, setEditedDone] = useState(done);
+
+  const handleEditTask = () => {
+    console.log("Editando tarefa", {
+      id,
+      editedName,
+      editedPriority,
+      editedImportant,
+      editedCategory,
+      editedDone,
+    });
+    // Atualiza a tarefa com os novos valores
+    dispatch({
+      type: "EDIT_TASK",
+      payload: {
+        id,
+        name: editedName,
+        priority: editedPriority,
+        important: editedImportant,
+        category: editedCategory,
+        updatedAt: new Date().toISOString(),
+        createdAt,
+        done: editedDone,
+      },
+    });
+  };
 
   const categories = createListCollection({
     items: [
@@ -46,7 +91,7 @@ export default function ModalEditTask(id: number) {
   });
 
   return (
-    <DialogRoot initialFocusEl={() => ref.current}>
+    <DialogRoot>
       <DialogTrigger asChild>
         <Flex
           gap={2}
@@ -64,49 +109,62 @@ export default function ModalEditTask(id: number) {
         <DialogBody pb="4">
           <Stack gap="4">
             <Field label="Titulo">
-              <Input placeholder="Title" defaultValue={"titulo"} />
+              <Input
+                placeholder="Title"
+                defaultValue={editedName}
+                onChange={(e) => setEditedName(e.target.value)}
+              />
             </Field>
             <Field label="Prioridade">
-              <SelectRoot
-                collection={priorityCollection}
-                size="md"
-                defaultValue={["Baixa"]}
+              <NativeSelect.Root
+                size="sm"
+                width="240px"
+                defaultValue={editedPriority}
+                onChange={(event) =>
+                  setEditedPriority(
+                    (event.target as HTMLSelectElement).value as
+                      | "Urgente"
+                      | "Alta"
+                      | "Média"
+                      | "Baixa"
+                  )
+                }
               >
-                <SelectTrigger display="flex" justifyContent="space-between">
-                  <SelectValueText placeholder="Selecione a prioridade" />
-                  <span>&#9662;</span>{" "}
-                  {/* Adicionando a seta manualmente se necessário */}
-                </SelectTrigger>
-                <SelectContent>
-                  {priorityCollection.items.map((priorityItem) => (
-                    <SelectItem key={priorityItem.value} item={priorityItem}>
-                      {priorityItem.label}
-                    </SelectItem>
-                  ))}
-                </SelectContent>
-              </SelectRoot>
+                <NativeSelect.Field placeholder="Select option">
+                  <option value="Urgente">Urgente</option>
+                  <option value="Alta">Alta</option>
+                  <option value="Média">Média</option>
+                  <option value="Baixa">Baixa</option>
+                </NativeSelect.Field>
+                <NativeSelect.Indicator />
+              </NativeSelect.Root>
             </Field>
             <Field label="Categoria">
-              <SelectRoot
-                collection={categories} // Passando a coleção de categorias aqui
-                size="md"
-                defaultValue={["Outros"]}
+              <NativeSelect.Root
+                size="sm"
+                width="240px"
+                defaultValue={editedCategory}
+                onChange={(event) =>
+                  setEditedCategory((event.target as HTMLSelectElement).value)
+                }
               >
-                <SelectTrigger display="flex" justifyContent="space-between">
-                  <SelectValueText placeholder="Selecione a categoria" />
-                  <span>&#9662;</span>
-                </SelectTrigger>
-                <SelectContent>
-                  {categories.items.map((categoryItem) => (
-                    <SelectItem key={categoryItem.value} item={categoryItem}>
-                      {categoryItem.label}
-                    </SelectItem>
-                  ))}
-                </SelectContent>
-              </SelectRoot>
+                <NativeSelect.Field placeholder="Selecione a categoria">
+                  <option value="Saúde">Saúde</option>
+                  <option value="Trabalho">Trabalho</option>
+                  <option value="Estudo">Estudo</option>
+                  <option value="Financeiro">Financeiro</option>
+                  <option value="Lazer">Lazer</option>
+                  <option value="Outros">Outros</option>
+                </NativeSelect.Field>
+                <NativeSelect.Indicator />
+              </NativeSelect.Root>
             </Field>
 
-            <Checkbox defaultChecked={false} colorPalette={"blue"}>
+            <Checkbox
+              defaultChecked={editedImportant}
+              colorPalette={"blue"}
+              onChange={() => setEditedImportant(!editedImportant)}
+            >
               Importante
             </Checkbox>
           </Stack>
@@ -117,7 +175,9 @@ export default function ModalEditTask(id: number) {
               Cancelar
             </Button>
           </DialogActionTrigger>
-          <Button colorPalette="blue">Salvar</Button>
+          <Button colorPalette="blue" onClick={handleEditTask}>
+            Salvar
+          </Button>
         </DialogFooter>
       </DialogContent>
     </DialogRoot>

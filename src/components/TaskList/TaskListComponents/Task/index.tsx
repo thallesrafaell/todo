@@ -1,27 +1,14 @@
 "use client";
-import {
-  Flex,
-  HStack,
-  Text,
-  Badge,
-  Button,
-  MenuTrigger,
-  MenuRoot,
-  MenuContent,
-  MenuItem,
-  useDisclosure,
-  Menu,
-} from "@chakra-ui/react";
+import { Flex, HStack, Text, Badge } from "@chakra-ui/react";
 import { Checkbox } from "@/components/ui/checkbox";
 import { RiStarFill, RiStarLine } from "react-icons/ri";
 import { useColorModeValue } from "@/components/ui/color-mode";
 import { useGlobalState } from "@/context/GlobalStateContext";
 
-import { FaEllipsis } from "react-icons/fa6";
 import { TbTrash } from "react-icons/tb";
-import { BiEdit } from "react-icons/bi";
+
 import ModalEditTask from "./ModalEditTask";
-import { use, useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import { AnimatePresence, motion } from "framer-motion";
 
 export type TaskProps = {
@@ -33,6 +20,7 @@ export type TaskProps = {
   priority: "Urgente" | "Alta" | "Média" | "Baixa";
   important: boolean;
   category: string;
+  openModal?: boolean;
 };
 
 export default function Task({
@@ -71,9 +59,32 @@ export default function Task({
     });
   };
 
-  useEffect(() => {
-    console.log("no task", done);
-  }, [done]);
+  const getTimeAgo = (createdAt: string) => {
+    const now = new Date();
+    const createdDate = new Date(createdAt);
+    const diffInMilliseconds = now.getTime() - createdDate.getTime();
+    const diffInMinutes = Math.floor(diffInMilliseconds / (1000 * 60));
+    const diffInHours = Math.floor(diffInMilliseconds / (1000 * 60 * 60));
+    const diffInDays = Math.floor(diffInMilliseconds / (1000 * 60 * 60 * 24));
+
+    // Se a tarefa foi criada há menos de 1 minuto
+    if (diffInMinutes < 1) return "Há menos de 1 minuto";
+
+    // Se a tarefa foi criada há 1 minuto até 59 minutos
+    if (diffInMinutes < 60)
+      return `Há ${diffInMinutes} minuto${diffInMinutes > 1 ? "s" : ""}`;
+
+    // Se a tarefa foi criada há 1 hora até 5 horas
+    if (diffInHours <= 5)
+      return `Há ${diffInHours} hora${diffInHours > 1 ? "s" : ""}`;
+
+    // Se a tarefa foi criada entre 5 horas e 24 horas
+    if (diffInHours < 24) return "Hoje";
+
+    // Se a tarefa foi criada há mais de 1 dia
+    if (diffInDays === 1) return "Há 1 dia";
+    if (diffInDays > 1) return `Há ${diffInDays} dias`;
+  };
 
   return (
     <>
@@ -136,7 +147,7 @@ export default function Task({
                 </Flex>
               </Flex>
               <Flex gap={2} align={"center"}>
-                <Text display={{ base: "none", md: "block" }}>Há 1 minuto</Text>
+                <Text display={{ base: "none", md: "block" }}> {getTimeAgo(createdAt)}</Text>
                 {!important ? (
                   <RiStarLine color={starColor} />
                 ) : (
@@ -149,7 +160,16 @@ export default function Task({
                 >
                   <TbTrash />
                 </Text>
-                <ModalEditTask />
+                <ModalEditTask
+                  id={id}
+                  name={name}
+                  createdAt={createdAt}
+                  updatedAt={updatedAt}
+                  priority={priority}
+                  category={category}
+                  important={important}
+                  done={done}
+                />
               </Flex>
             </HStack>
           </motion.div>
