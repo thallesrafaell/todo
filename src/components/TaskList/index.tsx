@@ -41,6 +41,9 @@ export default function TaskList() {
   const name = "Thalles Rafael";
   const [date, setDate] = useState<string | null>(null);
 
+  const incompleteTasks = tasks.filter((task: TaskType) => !task.done);
+  const completedTasks = tasks.filter((task: TaskType) => task.done);
+
   const handleAddTask = (task: TaskType) => {
     dispatch({ type: "ADD_TASK", payload: task });
   };
@@ -65,8 +68,6 @@ export default function TaskList() {
     return () => clearInterval(interval);
   }, []);
 
-  
-
   return (
     <HStack paddingTop={10} paddingBottom={10}>
       <Container width={"100%"} maxW={"container.xl"}>
@@ -87,7 +88,6 @@ export default function TaskList() {
             </Text>
           </Flex>
         </Flex>
-
         <VStack alignItems={"start"} width={"100%"}>
           <InputGroup
             bg="white"
@@ -203,15 +203,36 @@ export default function TaskList() {
           )}
         </VStack>
         <Separator mt={4} mb={5} />
-
-        {tasks.map((task: TaskType) => {
+        Tasks
+        {incompleteTasks.map((task: TaskType) => {
+          console.log("completa:", task);
           return (
             <div key={task.id}>
               <Task
                 key={task.id}
                 id={task.id}
                 name={task.name}
-                done={false}
+                done={task.done}
+                createdAt={task.createdAt}
+                priority={task.priority}
+                important={task.important}
+                category={""}
+              />
+              <Separator />
+            </div>
+          );
+        })}
+        task completed
+        {completedTasks.map((task: TaskType) => {
+          console.log("imcompleta:", task);
+
+          return (
+            <div key={task.id}>
+              <Task
+                key={task.id}
+                id={task.id}
+                name={task.name}
+                done={task.done}
                 createdAt={task.createdAt}
                 priority={task.priority}
                 important={task.important}
@@ -226,10 +247,10 @@ export default function TaskList() {
   );
 }
 export const priorityCollection = createListCollection({
-    items: [
-      { label: "Urgente", value: "Urgente" },
-      { label: "Alta", value: "Alta" },
-      { label: "Média", value: "Média" },
-      { label: "Baixa", value: "Baixa" },
-    ],
-  });
+  items: [
+    { label: "Urgente", value: "Urgente" },
+    { label: "Alta", value: "Alta" },
+    { label: "Média", value: "Média" },
+    { label: "Baixa", value: "Baixa" },
+  ],
+});
