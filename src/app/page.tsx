@@ -7,6 +7,7 @@ import { Box,  } from "@chakra-ui/react";
 import { useEffect, useState } from "react";
 
 export default function Home() {
+  const [searchTerm, setSearchTerm] = useState("");
 
   const [isHydrated, setIsHydrated] = useState(false);
 
@@ -26,9 +27,9 @@ export default function Home() {
       height={"100%"}
       bg={bgColor}
     >
-      <Header />
+      <Header searchTerm={searchTerm} onSearch={(term) => setSearchTerm(term)} />
       <GlobalStateProvider>
-        <TaskList />
+        <TaskList searchTerm={searchTerm} />
       </GlobalStateProvider>
     </Box>
   );

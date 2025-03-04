@@ -29,7 +29,12 @@ import { Task as TaskType } from "@/context/reducer";
 import { useColorModeValue } from "@/components/ui/color-mode";
 import { RiStarFill, RiStarLine } from "react-icons/ri";
 
-export default function TaskList() {
+
+interface TaskListProps {
+  searchTerm: string;
+}
+
+export default function TaskList({ searchTerm }: TaskListProps) {
   const { state, dispatch } = useGlobalState();
   const { tasks } = state;
   const [taskName, setTaskName] = useState("");
@@ -42,13 +47,16 @@ export default function TaskList() {
   const [addVisible, setAddVisible] = useState(false);
   const name = "Thalles Rafael";
   const [date, setDate] = useState<string | null>(null);
-  const [searchTerm, setSearchTerm] = useState("");
+  
 
   const [byDateIsVisible, setByDateIsVisible] = useState(false);
   const [byAlphabeticalIsVisible, setByAlphabeticalIsVisible] = useState(false);
 
-  const incompleteTasks = tasks.filter((task: TaskType) => !task.done);
-  const completedTasks = tasks.filter((task: TaskType) => task.done);
+  const filteredTasks = tasks.filter((task: TaskType) =>
+    task.name.toLowerCase().includes((searchTerm || "").toLowerCase())
+  );
+  const incompleteTasks = filteredTasks.filter((task: TaskType) => !task.done);
+  const completedTasks = filteredTasks.filter((task: TaskType) => task.done);
 
   const sortedByName = incompleteTasks.sort((a: TaskType, b: TaskType) =>
     a.name.localeCompare(b.name)

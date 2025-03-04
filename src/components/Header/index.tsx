@@ -15,7 +15,7 @@ import { BiSearch } from "react-icons/bi";
 import { LuMoon, LuSun } from "react-icons/lu";
 import { useColorMode, useColorModeValue } from "@/components/ui/color-mode";
 
-export default function Header() {
+export default function Header({ searchTerm, onSearch } : {searchTerm: string, onSearch: (term: string) => void}) {
   const { toggleColorMode, colorMode } = useColorMode();
   return (
     <VStack bg={"blue"} p={4}>
@@ -44,6 +44,8 @@ export default function Header() {
               placeholder="Search task"
               width="400px"
               borderColor={"blue"}
+              value={searchTerm} 
+              onChange={(e) => onSearch(e.target.value)} 
             />
           </InputGroup>
           <Flex gap={{ base: "2px", md: "4px" }}>
