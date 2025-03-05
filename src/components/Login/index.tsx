@@ -17,15 +17,11 @@ export default function Login() {
 
 
   useEffect(() => {
-
-    if (!state.name) {
-      dispatch({
-        type: "SET_NAME",
-        payload: name,
-      });
+    // O redirecionamento no useEffect agora é controlado apenas se o nome estiver presente no estado global.
+    if (state.name) {
       router.push("/todo");
     }
-  }, [dispatch, router]);
+  }, [state.name, router]);
 
   const handleNameChange = (name: string) => {
     dispatch({
