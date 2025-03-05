@@ -16,7 +16,7 @@ export const GlobalStateProvider: React.FC<GlobalStateProviderProps> = ({
   children,
 }) => {
   const [storedTasks, setStoredTasks] = useLocalStorage();
-  const {tasks, name} = loadInitialState();
+  const { tasks, name } = loadInitialState();
 
   const initialState = {
     tasks, // Inicializa o estado com as tarefas carregadas
@@ -30,9 +30,9 @@ export const GlobalStateProvider: React.FC<GlobalStateProviderProps> = ({
   useEffect(() => {
     if (storedTasks && storedTasks.length > 0) {
       console.log("Carregando tarefas do localStorage:", storedTasks);
-      dispatch({ type: "LOAD_TASKS", payload: storedTasks }); 
+      dispatch({ type: "LOAD_TASKS", payload: storedTasks });
     }
-  }, [storedTasks]); 
+  }, [storedTasks]);
 
   // Atualizar o localStorage sempre que as tarefas mudarem
   useEffect(() => {
@@ -43,7 +43,14 @@ export const GlobalStateProvider: React.FC<GlobalStateProviderProps> = ({
       console.log("Salvando tarefas no localStorage:", state.tasks);
       setStoredTasks(state.tasks);
     }
-  }, [state.tasks]); 
+  }, [state.tasks]);
+
+  useEffect(() => {
+    if (state.name) {
+      console.log("Salvando nome no localStorage:", state.name);
+      localStorage.setItem("USER_NAME", state.name);
+    }
+  }, [state.name]);
 
   return (
     <GlobalStateContext.Provider value={{ state, dispatch }}>

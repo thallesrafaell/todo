@@ -70,7 +70,7 @@ export default function Header({ searchTerm, onSearch } : {searchTerm: string, o
                 {state.name}
               </Text>
               <Avatar.Root width={8} height={8}>
-                <Avatar.Fallback name="Thalles RafaelS" />
+                <Avatar.Fallback name={state.name} />
               </Avatar.Root>
             </Flex>
           </Flex>
