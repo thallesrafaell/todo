@@ -8,29 +8,25 @@ import { InputGroup } from "../ui/input-group";
 import { LuUser } from "react-icons/lu";
 import { useRouter } from "next/navigation"; // Para redirecionar o usuário
 
+
 export default function Login() {
   const { state, dispatch } = useGlobalState(); // Acessando o estado global
   const router = useRouter(); // Hook para navegação
-  const [storedName, setStoredName] = useState<string | null>(null); // Verificar se já existe o nome no localStorage
+   // Verificar se já existe o nome no localStorage
   const [name, setName] = useState("");
   
-  useEffect(() => {
-    if (typeof window !== "undefined") {
-      const storedName = localStorage.getItem("USER_NAME"); // Verificar se já existe o nome no localStorage
-      setStoredName(storedName); // Atualiza o estado local com o nome armazenado
-    }
-  }, []);// Estado local para o nome
+
 
   useEffect(() => {
     // Se o nome já estiver no localStorage, redireciona para a página /todo
-    if (storedName) {
+    if (!state.name) {
       dispatch({
         type: "SET_NAME",
-        payload: storedName,
+        payload: name,
       });
       router.push("/todo"); // Redireciona para a página /todo
     }
-  }, [dispatch, router, storedName]);
+  }, [dispatch, router]);
 
   const handleNameChange = (name: string) => {
     dispatch({
@@ -88,9 +84,9 @@ export default function Login() {
       </InputGroup>
 
       {/* Exibindo o nome do usuário */}
-      {state.name && (
+      {name && (
         <Text mt={4} color="blue.500">
-          Olá, {state.name}!
+          Olá, {name}!
         </Text>
       )}
 
