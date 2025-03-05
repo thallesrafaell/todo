@@ -23,7 +23,14 @@ import Task from "./TaskListComponents/Task";
 import { CgCalendar, CgCalendarDates } from "react-icons/cg";
 import { useEffect, useState } from "react";
 import { InputGroup } from "../ui/input-group";
-import { BiPlus, BiSort } from "react-icons/bi";
+import {
+  BiAlbum,
+  BiCheck,
+  BiPlus,
+  BiSort,
+  BiTask,
+  BiTaskX,
+} from "react-icons/bi";
 import { useGlobalState } from "@/context/GlobalStateContext";
 import { Task as TaskType } from "@/context/reducer";
 import { useColorModeValue } from "@/components/ui/color-mode";
@@ -50,6 +57,10 @@ export default function TaskList({ searchTerm }: TaskListProps) {
 
   const [byDateIsVisible, setByDateIsVisible] = useState(false);
   const [byAlphabeticalIsVisible, setByAlphabeticalIsVisible] = useState(false);
+  const [byCompletedIsVisible, setByCompletedIsVisible] = useState(false);
+  const [allTasksIsVisible, setAllTasksIsVisible] = useState(false);
+  const [incompleteTasksIsVisible, setIncompleteTasksIsVisible] =
+    useState(true);
 
   const filteredTasks = tasks.filter((task: TaskType) =>
     task.name.toLowerCase().includes((searchTerm || "").toLowerCase())
@@ -260,31 +271,85 @@ export default function TaskList({ searchTerm }: TaskListProps) {
           </VStack>
         </form>
         <Separator mt={4} mb={5} />
-        <Flex justifyContent={"space-between"} alignItems={"center"}>
-          <Flex>
+        <Flex
+          justifyContent={"space-between"}
+          alignItems={"flex-start"}
+          gap={2}
+          flexDirection={"column"}
+        >
+          <Flex flexDirection={"column"} gap={2}>
             <Text
               fontWeight={"bold"}
               fontSize={"xl"}
               textAlign={"start"}
               marginTop={4}
-              marginBottom={2}
             >
               Tarefas
             </Text>
+            <Text color={"gray.500"} fontSize={"12"} textAlign={"start"}>
+              Filtros:
+            </Text>
           </Flex>
-          <Flex gap={2} alignItems={"end"}>
+          <Flex
+            gap={2}
+            alignItems={"end"}
+            overflowX={"auto"}
+            w={{ base: "100%", md: "550px" }}
+            maxW={"100%"}
+          >
+            <Button
+              size={"sm"}
+              colorPalette="blue"
+              variant={incompleteTasksIsVisible ? "solid" : "outline"}
+              onClick={() => {
+                setByDateIsVisible(false);
+                setByAlphabeticalIsVisible(false);
+                setByCompletedIsVisible(false);
+                setIncompleteTasksIsVisible(true);
+                setAllTasksIsVisible(false);
+              }}
+            >
+              <BiTaskX /> A fazer
+            </Button>
+
+            <Button
+              size={"sm"}
+              colorPalette="blue"
+              variant={allTasksIsVisible ? "solid" : "outline"}
+              onClick={() => {
+                setByDateIsVisible(false);
+                setByAlphabeticalIsVisible(false);
+                setByCompletedIsVisible(false);
+                setAllTasksIsVisible(true);
+                setIncompleteTasksIsVisible(false);
+              }}
+            >
+              <BiTask /> Todas
+            </Button>
+            <Button
+              size={"sm"}
+              colorPalette="blue"
+              variant={byCompletedIsVisible ? "solid" : "outline"}
+              onClick={() => {
+                setByDateIsVisible(false);
+                setByAlphabeticalIsVisible(false);
+                setByCompletedIsVisible(true);
+                setIncompleteTasksIsVisible(false);
+                setAllTasksIsVisible(false);
+              }}
+            >
+              <BiCheck /> Completas
+            </Button>
             <Button
               size={"sm"}
               colorPalette="blue"
               variant={byDateIsVisible ? "solid" : "outline"}
               onClick={() => {
-                if (byDateIsVisible) {
-                  setByDateIsVisible(false);
-                  return;
-                }
-
                 setByDateIsVisible(true);
                 setByAlphabeticalIsVisible(false);
+                setByCompletedIsVisible(false);
+                setIncompleteTasksIsVisible(false);
+                setAllTasksIsVisible(false);
               }}
             >
               <CgCalendarDates /> Data
@@ -294,18 +359,34 @@ export default function TaskList({ searchTerm }: TaskListProps) {
               colorPalette="blue"
               variant={byAlphabeticalIsVisible ? "solid" : "outline"}
               onClick={() => {
-                if (byAlphabeticalIsVisible) {
-                  setByAlphabeticalIsVisible(false);
-                  return;
-                }
                 setByDateIsVisible(false);
                 setByAlphabeticalIsVisible(true);
+                setByCompletedIsVisible(false);
+                setIncompleteTasksIsVisible(false);
+                setAllTasksIsVisible(false);
               }}
             >
               <BiSort /> Alfabética
             </Button>
           </Flex>
+          
         </Flex>
+        <Separator mt={4} mb={5} />
+        {allTasksIsVisible &&
+          filteredTasks.map((task: TaskType) => (
+            <div key={task.id}>
+              <Task
+                id={task.id}
+                name={task.name}
+                done={task.done}
+                createdAt={task.createdAt}
+                priority={task.priority}
+                important={task.important}
+                category={task.category}
+              />
+              <Separator />
+            </div>
+          ))}
         {byDateIsVisible &&
           sortedByDate.map((task: TaskType) => (
             <div key={task.id}>
@@ -338,7 +419,7 @@ export default function TaskList({ searchTerm }: TaskListProps) {
             </div>
           ))}
 
-        {!(byAlphabeticalIsVisible || byDateIsVisible) &&
+        {incompleteTasksIsVisible &&
           incompleteTasks.map((task: TaskType) => {
             return (
               <div key={task.id}>
@@ -356,32 +437,25 @@ export default function TaskList({ searchTerm }: TaskListProps) {
               </div>
             );
           })}
-        <Text
-          fontWeight={"bold"}
-          fontSize={"xl"}
-          textAlign={"start"}
-          marginTop={4}
-          marginBottom={2}
-        >
-          Tarefas Completas
-        </Text>
-        {completedTasks.map((task: TaskType) => {
-          return (
-            <div key={task.id}>
-              <Task
-                key={task.id}
-                id={task.id}
-                name={task.name}
-                done={task.done}
-                createdAt={task.createdAt}
-                priority={task.priority}
-                important={task.important}
-                category={""}
-              />
-              <Separator />
-            </div>
-          );
-        })}
+
+        {byCompletedIsVisible &&
+          completedTasks.map((task: TaskType) => {
+            return (
+              <div key={task.id}>
+                <Task
+                  key={task.id}
+                  id={task.id}
+                  name={task.name}
+                  done={task.done}
+                  createdAt={task.createdAt}
+                  priority={task.priority}
+                  important={task.important}
+                  category={""}
+                />
+                <Separator />
+              </div>
+            );
+          })}
       </Container>
     </HStack>
   );
