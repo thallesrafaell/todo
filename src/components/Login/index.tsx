@@ -1,5 +1,5 @@
 "use client";
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import { useGlobalState } from "@/context/GlobalStateContext";
 import { Box, Flex, Input, Text, Button } from "@chakra-ui/react";
 import { useColorModeValue } from "../ui/color-mode";
@@ -12,6 +12,7 @@ export default function Login() {
   const { state, dispatch } = useGlobalState(); // Acessando o estado global
   const router = useRouter(); // Hook para navegação
   const storedName = localStorage.getItem("USER_NAME"); // Verificar se já existe o nome no localStorage
+  const [name, setName] = useState(""); // Estado local para o nome
 
   useEffect(() => {
     // Se o nome já estiver no localStorage, redireciona para a página /todo
@@ -24,10 +25,10 @@ export default function Login() {
     }
   }, [dispatch, router, storedName]);
 
-  const handleNameChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+  const handleNameChange = (name: string) => {
     dispatch({
       type: "SET_NAME",
-      payload: e.target.value,
+      payload: name,
     });
   };
 
@@ -68,9 +69,8 @@ export default function Login() {
 
       <InputGroup width="100%" maxW="300px" startElement={<LuUser />}>
         <Input
-          value={state.name} // Vinculando o valor ao estado global
-          onChange={handleNameChange} // Atualizando o nome no estado global
           placeholder="Digite Seu Nome"
+          onChange={(e) => setName(e.target.value)}
           bg={useColorModeValue("white", "gray.800")}
           color={useColorModeValue("black", "white")}
           _placeholder={{ color: useColorModeValue("gray.400", "gray.500") }}
@@ -91,8 +91,11 @@ export default function Login() {
       <Button
         mt={6}
         colorPalette="blue"
-        onClick={handleLogin}
-        disabled={!state.name} // Desabilita o botão se o nome não for preenchido
+        onClick={() => {
+          handleNameChange(name);
+          handleLogin();
+        }}
+        disabled={!name} // Desabilita o botão se o nome não for preenchido
       >
         Entrar
       </Button>
