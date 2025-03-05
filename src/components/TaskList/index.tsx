@@ -60,13 +60,15 @@ export default function TaskList({ searchTerm }: TaskListProps) {
   const incompleteTasks = filteredTasks.filter((task: TaskType) => !task.done);
   const completedTasks = filteredTasks.filter((task: TaskType) => task.done);
 
-  const sortedByName = incompleteTasks.sort((a: TaskType, b: TaskType) =>
+  const sortedByName = [...incompleteTasks].sort((a: TaskType, b: TaskType) =>
     a.name.localeCompare(b.name)
   );
-  const sortedByDate = incompleteTasks.sort(
+  
+  const sortedByDate = [...incompleteTasks].sort(
     (a: TaskType, b: TaskType) =>
       new Date(a.createdAt).getTime() - new Date(b.createdAt).getTime()
   );
+  
 
   const handleAddTask = (task: TaskType) => {
     dispatch({ type: "ADD_TASK", payload: task });
