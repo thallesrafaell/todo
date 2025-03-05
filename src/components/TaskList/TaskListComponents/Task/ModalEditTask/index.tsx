@@ -1,12 +1,6 @@
 "use client";
 
-import {
-  Button,
-  Flex,
-  Input,
-  NativeSelect,
-  Stack,
-} from "@chakra-ui/react";
+import { Button, Flex, Input, NativeSelect, Stack } from "@chakra-ui/react";
 import {
   DialogActionTrigger,
   DialogBody,
@@ -20,7 +14,7 @@ import {
 import { Checkbox } from "@/components/ui/checkbox";
 
 import { Field } from "@/components/ui/field";
-import {  useState } from "react";
+import { useState } from "react";
 import { BiEdit } from "react-icons/bi";
 
 import { TaskProps } from "..";
@@ -70,7 +64,6 @@ export default function ModalEditTask({
     });
   };
 
- 
   return (
     <DialogRoot>
       <DialogTrigger asChild>

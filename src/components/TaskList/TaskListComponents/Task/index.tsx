@@ -8,7 +8,7 @@ import { useGlobalState } from "@/context/GlobalStateContext";
 import { TbTrash } from "react-icons/tb";
 
 import ModalEditTask from "./ModalEditTask";
-import {  useState } from "react";
+import { useState } from "react";
 import { AnimatePresence, motion } from "framer-motion";
 
 export type TaskProps = {
@@ -102,7 +102,7 @@ export default function Task({
               align="center"
               mb={4}
               justifyContent={"space-between"}
-              _hover={{             
+              _hover={{
                 border: `1px solid ${borderColor}`,
               }}
               border={"1px solid transparent"}
@@ -117,11 +117,9 @@ export default function Task({
                       variant={"solid"}
                       colorPalette={"blue"}
                       onCheckedChange={handleToggleComplete}
-                      defaultChecked={done}                   
+                      defaultChecked={done}
                     />
-                    <Text color={textColor} >
-                      {name}
-                    </Text>
+                    <Text color={textColor}>{name}</Text>
                   </Flex>
                 </Flex>
                 <Flex>
@@ -149,7 +147,10 @@ export default function Task({
                 </Flex>
               </Flex>
               <Flex gap={2} align={"center"}>
-                <Text display={{ base: "none", md: "block" }}> {getTimeAgo(createdAt)}</Text>
+                <Text display={{ base: "none", md: "block" }}>
+                  {" "}
+                  {getTimeAgo(createdAt)}
+                </Text>
                 {!important ? (
                   <RiStarLine color={starColor} />
                 ) : (
