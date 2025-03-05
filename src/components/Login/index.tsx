@@ -11,8 +11,15 @@ import { useRouter } from "next/navigation"; // Para redirecionar o usuário
 export default function Login() {
   const { state, dispatch } = useGlobalState(); // Acessando o estado global
   const router = useRouter(); // Hook para navegação
-  const storedName = localStorage.getItem("USER_NAME"); // Verificar se já existe o nome no localStorage
-  const [name, setName] = useState(""); // Estado local para o nome
+  const [storedName, setStoredName] = useState<string | null>(null); // Verificar se já existe o nome no localStorage
+  const [name, setName] = useState("");
+  
+  useEffect(() => {
+    if (typeof window !== "undefined") {
+      const storedName = localStorage.getItem("USER_NAME"); // Verificar se já existe o nome no localStorage
+      setStoredName(storedName); // Atualiza o estado local com o nome armazenado
+    }
+  }, []);// Estado local para o nome
 
   useEffect(() => {
     // Se o nome já estiver no localStorage, redireciona para a página /todo
