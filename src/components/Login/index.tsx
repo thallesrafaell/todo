@@ -6,25 +6,24 @@ import { useColorModeValue } from "../ui/color-mode";
 import { FaCheck } from "react-icons/fa";
 import { InputGroup } from "../ui/input-group";
 import { LuUser } from "react-icons/lu";
-import { useRouter } from "next/navigation"; // Para redirecionar o usuário
+import { useRouter } from "next/navigation"; 
 
 
 export default function Login() {
-  const { state, dispatch } = useGlobalState(); // Acessando o estado global
-  const router = useRouter(); // Hook para navegação
-   // Verificar se já existe o nome no localStorage
+  const { state, dispatch } = useGlobalState();
+  const router = useRouter(); 
   const [name, setName] = useState("");
   
 
 
   useEffect(() => {
-    // Se o nome já estiver no localStorage, redireciona para a página /todo
+
     if (!state.name) {
       dispatch({
         type: "SET_NAME",
         payload: name,
       });
-      router.push("/todo"); // Redireciona para a página /todo
+      router.push("/todo");
     }
   }, [dispatch, router]);
 
@@ -36,10 +35,13 @@ export default function Login() {
   };
 
   const handleLogin = () => {
-    if (state.name) {
-      // Salva o nome no localStorage
-      localStorage.setItem("USER_NAME", state.name);
-      router.push("/todo"); // Redireciona para a página /todo
+    if (name) {
+      
+      dispatch({
+        type: "SET_NAME",
+        payload: name,
+      });
+      router.push("/todo");
     }
   };
 
@@ -83,14 +85,12 @@ export default function Login() {
         />
       </InputGroup>
 
-      {/* Exibindo o nome do usuário */}
       {name && (
         <Text mt={4} color="blue.500">
           Olá, {name}!
         </Text>
       )}
 
-      {/* Botão de login */}
       <Button
         mt={6}
         colorPalette="blue"
@@ -98,7 +98,7 @@ export default function Login() {
           handleNameChange(name);
           handleLogin();
         }}
-        disabled={!name} // Desabilita o botão se o nome não for preenchido
+        disabled={!name} 
       >
         Entrar
       </Button>
