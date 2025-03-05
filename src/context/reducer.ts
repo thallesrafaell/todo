@@ -57,7 +57,7 @@ export const reducer = (state: State, action: Action): State => {
       const updatedTasks = state.tasks.filter(
         (task) => task.id !== action.payload
       );
-      localStorage.setItem("USER_TASKS", JSON.stringify(updatedTasks));
+
       return {
         ...state,
         tasks: updatedTasks,
@@ -81,7 +81,6 @@ export const reducer = (state: State, action: Action): State => {
         tasks: state.tasks.filter((task) => task.id === action.payload),
       };
     case actionTypes.SET_NAME:
-      localStorage.setItem("USER_NAME", action.payload); // Caso para atualizar o nome
       return {
         ...state,
         name: action.payload,
@@ -91,10 +90,3 @@ export const reducer = (state: State, action: Action): State => {
   }
 };
 
-export const loadInitialState = (): Task[] => {
-  const savedTasks = localStorage.getItem("USER_TASKS");
-  if (savedTasks) {
-    return JSON.parse(savedTasks); // Retorna as tarefas carregadas
-  }
-  return []; // Retorna um array vazio se não houver dados
-};
