@@ -1,3 +1,5 @@
+/* eslint-disable @typescript-eslint/no-empty-object-type */
+/* eslint-disable react/display-name */
 "use client";
 
 import type { IconButtonProps, SpanProps } from "@chakra-ui/react";
@@ -15,12 +17,12 @@ export function ColorModeProvider(props: ColorModeProviderProps) {
   );
 }
 
-export type ColorMode = "light" | "dark"
+export type ColorMode = "light" | "dark";
 
 export interface UseColorModeReturn {
-  colorMode: ColorMode
-  setColorMode: (colorMode: ColorMode) => void
-  toggleColorMode: () => void
+  colorMode: ColorMode;
+  setColorMode: (colorMode: ColorMode) => void;
+  toggleColorMode: () => void;
 }
 
 export function useColorMode(): UseColorModeReturn {
@@ -87,7 +89,7 @@ export const LightMode = React.forwardRef<HTMLSpanElement, SpanProps>(
         {...props}
       />
     );
-  },
+  }
 );
 
 export const DarkMode = React.forwardRef<HTMLSpanElement, SpanProps>(
@@ -103,5 +105,5 @@ export const DarkMode = React.forwardRef<HTMLSpanElement, SpanProps>(
         {...props}
       />
     );
-  },
+  }
 );

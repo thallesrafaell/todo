@@ -1,10 +1,11 @@
+/* eslint-disable react/display-name */
 import { Popover as ChakraPopover, Portal } from "@chakra-ui/react";
 import { CloseButton } from "./close-button";
 import * as React from "react";
 
 interface PopoverContentProps extends ChakraPopover.ContentProps {
-  portalled?: boolean
-  portalRef?: React.RefObject<HTMLElement>
+  portalled?: boolean;
+  portalRef?: React.RefObject<HTMLElement>;
 }
 
 export const PopoverContent = React.forwardRef<

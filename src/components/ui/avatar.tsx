@@ -1,18 +1,19 @@
+/* eslint-disable react/display-name */
 import {
   Avatar as ChakraAvatar,
   AvatarGroup as ChakraAvatarGroup,
 } from "@chakra-ui/react";
 import * as React from "react";
 
-type ImageProps = React.ImgHTMLAttributes<HTMLImageElement>
+type ImageProps = React.ImgHTMLAttributes<HTMLImageElement>;
 
 export interface AvatarProps extends ChakraAvatar.RootProps {
-  name?: string
-  src?: string
-  srcSet?: string
-  loading?: ImageProps["loading"]
-  icon?: React.ReactElement
-  fallback?: React.ReactNode
+  name?: string;
+  src?: string;
+  srcSet?: string;
+  loading?: ImageProps["loading"];
+  icon?: React.ReactElement;
+  fallback?: React.ReactNode;
 }
 
 export const Avatar = React.forwardRef<HTMLDivElement, AvatarProps>(
@@ -28,7 +29,7 @@ export const Avatar = React.forwardRef<HTMLDivElement, AvatarProps>(
         {children}
       </ChakraAvatar.Root>
     );
-  },
+  }
 );
 
 export const AvatarGroup = ChakraAvatarGroup;

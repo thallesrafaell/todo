@@ -1,11 +1,12 @@
+/* eslint-disable react/display-name */
 import { Field as ChakraField } from "@chakra-ui/react";
 import * as React from "react";
 
 export interface FieldProps extends Omit<ChakraField.RootProps, "label"> {
-  label?: React.ReactNode
-  helperText?: React.ReactNode
-  errorText?: React.ReactNode
-  optionalText?: React.ReactNode
+  label?: React.ReactNode;
+  helperText?: React.ReactNode;
+  errorText?: React.ReactNode;
+  optionalText?: React.ReactNode;
 }
 
 export const Field = React.forwardRef<HTMLDivElement, FieldProps>(
@@ -29,5 +30,5 @@ export const Field = React.forwardRef<HTMLDivElement, FieldProps>(
         )}
       </ChakraField.Root>
     );
-  },
+  }
 );
