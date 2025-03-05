@@ -93,7 +93,7 @@ export default function TaskList({ searchTerm }: TaskListProps) {
   }, []);
 
   return (
-    <HStack paddingTop={10} paddingBottom={10}>
+    <HStack paddingTop={10} paddingBottom={10} overflow={"hidden"}>
       <Container width={"100%"} maxW={"container.xl"}>
         <Flex
           justifyContent="center"

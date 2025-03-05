@@ -50,6 +50,7 @@ export default function Login() {
       justifyContent="center"
       alignItems="center"
       flexDirection="column"
+      overflow={"hidden"}
       p={4}
     >
       <Flex alignItems="center" justifyContent="center" gap={4} mb={6}>

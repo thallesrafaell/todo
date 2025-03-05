@@ -16,17 +16,11 @@ import { LuMoon, LuSun } from "react-icons/lu";
 import { useColorMode, useColorModeValue } from "@/components/ui/color-mode";
 import { useGlobalState } from "@/context/GlobalStateContext";
 
-export default function Header({
-  searchTerm,
-  onSearch,
-}: {
-  searchTerm: string;
-  onSearch: (term: string) => void;
-}) {
+export default function Header({ searchTerm, onSearch } : {searchTerm: string, onSearch: (term: string) => void}) {
   const { toggleColorMode, colorMode } = useColorMode();
-  const { state } = useGlobalState();
+  const {state} = useGlobalState();
   return (
-    <VStack bg={"blue"} p={4}>
+    <VStack bg={"blue"} p={4} overflow={"hidden"}>
       <Container maxW="container.xl">
         <Flex alignItems={"center"} justifyContent={"space-between"} gap={2}>
           <Flex alignItems={"center"} gap={2}>
@@ -52,8 +46,8 @@ export default function Header({
               placeholder="Search task"
               width="400px"
               borderColor={"blue"}
-              value={searchTerm}
-              onChange={(e) => onSearch(e.target.value)}
+              value={searchTerm} 
+              onChange={(e) => onSearch(e.target.value)} 
             />
           </InputGroup>
           <Flex gap={{ base: "2px", md: "4px" }}>
