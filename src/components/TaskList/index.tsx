@@ -23,19 +23,11 @@ import Task from "./TaskListComponents/Task";
 import { CgCalendar, CgCalendarDates } from "react-icons/cg";
 import { useEffect, useState } from "react";
 import { InputGroup } from "../ui/input-group";
-import {
-  BiAlbum,
-  BiCheck,
-  BiPlus,
-  BiSort,
-  BiTask,
-  BiTaskX,
-} from "react-icons/bi";
+import { BiCheck, BiPlus, BiSort, BiTask, BiTaskX } from "react-icons/bi";
 import { useGlobalState } from "@/context/GlobalStateContext";
 import { Task as TaskType } from "@/context/reducer";
 import { useColorModeValue } from "@/components/ui/color-mode";
 import { RiStarFill, RiStarLine } from "react-icons/ri";
-import { useRouter } from "next/router";
 
 interface TaskListProps {
   searchTerm: string;
@@ -369,7 +361,6 @@ export default function TaskList({ searchTerm }: TaskListProps) {
               <BiSort /> Alfabética
             </Button>
           </Flex>
-          
         </Flex>
         <Separator mt={4} mb={5} />
         {allTasksIsVisible &&

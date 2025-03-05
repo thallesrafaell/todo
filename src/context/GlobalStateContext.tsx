@@ -4,6 +4,7 @@ import useLocalStorage from "@/hooks/useLocalStorage";
 import { loadInitialState } from "@/utils/loadInitialState";
 
 // Contexto para o estado global
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
 const GlobalStateContext = createContext<any>(null);
 
 // Provider para fornecer o estado global

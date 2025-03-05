@@ -8,7 +8,7 @@ import { useGlobalState } from "@/context/GlobalStateContext";
 import { TbTrash } from "react-icons/tb";
 
 import ModalEditTask from "./ModalEditTask";
-import { useEffect, useState } from "react";
+import {  useState } from "react";
 import { AnimatePresence, motion } from "framer-motion";
 
 export type TaskProps = {
@@ -35,6 +35,8 @@ export default function Task({
 }: TaskProps) {
   const { dispatch } = useGlobalState();
   const starColor = useColorModeValue("black", "white");
+  const textColor = useColorModeValue("black", "white");
+  const borderColor = useColorModeValue("gray", "white");
   const [complete, setComplete] = useState(done);
   const [isRemoved, setIsRemoved] = useState(false);
 
@@ -100,8 +102,8 @@ export default function Task({
               align="center"
               mb={4}
               justifyContent={"space-between"}
-              _hover={{
-                border: `1px solid ${useColorModeValue("gray", "white")}`,
+              _hover={{             
+                border: `1px solid ${borderColor}`,
               }}
               border={"1px solid transparent"}
               borderRadius={4}
@@ -115,9 +117,9 @@ export default function Task({
                       variant={"solid"}
                       colorPalette={"blue"}
                       onCheckedChange={handleToggleComplete}
-                      defaultChecked={done}
+                      defaultChecked={done}                   
                     />
-                    <Text color={useColorModeValue("black", "white")}>
+                    <Text color={textColor} >
                       {name}
                     </Text>
                   </Flex>

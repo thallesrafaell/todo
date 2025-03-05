@@ -5,13 +5,7 @@ import {
   Flex,
   Input,
   NativeSelect,
-  SelectContent,
-  SelectItem,
-  SelectRoot,
-  SelectTrigger,
-  SelectValueText,
   Stack,
-  createListCollection,
 } from "@chakra-ui/react";
 import {
   DialogActionTrigger,
@@ -26,9 +20,9 @@ import {
 import { Checkbox } from "@/components/ui/checkbox";
 
 import { Field } from "@/components/ui/field";
-import { useRef, useState } from "react";
+import {  useState } from "react";
 import { BiEdit } from "react-icons/bi";
-import { priorityCollection } from "@/components/TaskList";
+
 import { TaskProps } from "..";
 import { useGlobalState } from "@/context/GlobalStateContext";
 
@@ -36,7 +30,6 @@ export default function ModalEditTask({
   id,
   name,
   createdAt,
-  updatedAt,
   priority,
   important,
   category,
@@ -50,7 +43,7 @@ export default function ModalEditTask({
   >(priority);
   const [editedCategory, setEditedCategory] = useState(category);
   const [editedImportant, setEditedImportant] = useState(important);
-  const [editedDone, setEditedDone] = useState(done);
+  const [editedDone] = useState(done);
 
   const handleEditTask = () => {
     console.log("Editando tarefa", {
@@ -77,19 +70,7 @@ export default function ModalEditTask({
     });
   };
 
-  const categories = createListCollection({
-    items: [
-      { label: "Saúde", value: "Saúde" },
-      { label: "Trabalho", value: "Trabalho" },
-      { label: "Estudo", value: "Estudo" },
-      { label: "Financeiro", value: "Financeiro" },
-      { label: "Lazer", value: "Lazer" },
-      { label: "Outros", value: "Outros" },
-    ],
-    itemToString: (item) => item.label,
-    itemToValue: (item) => item.value,
-  });
-
+ 
   return (
     <DialogRoot>
       <DialogTrigger asChild>
